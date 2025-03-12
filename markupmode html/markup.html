@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Editor</title>
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #1e1e1e;
+        color: white;
+        margin: 0;
+        padding: 20px;
+    }
+    
+    .editor-container {
+        max-width: 90%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .toolbar {
+        background: #333;
+        padding: 10px;
+        display: flex;
+        gap: 8px;
+        border-radius: 5px;
+    }
+    
+    .toolbar button {
+        background: #555;
+        color: white;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+    
+    .toolbar button:hover {
+        background: #777;
+    }
+    
+    .editor {
+        display: flex;
+        gap: 10px;
+        height: 500px;
+    }
+    
+    textarea, #preview {
+        flex: 1;
+        padding: 15px;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+        background: #222;
+        color: white;
+        overflow-y: auto;
+    }
+    
+    textarea {
+        resize: none;
+    }
+    
+    #preview {
+        background: #282828;
+        padding: 15px;
+        overflow-y: auto;
+        border-left: 2px solid #444;
+    }
+    
+</head>
+<body>
+    <div class="editor-container">
+        <div class="toolbar">
+            <button onclick="insertMarkdown('# ')">H1</button>
+            <button onclick="insertMarkdown('## ')">H2</button>
+            <button onclick="insertMarkdown('**bold**')"><b>B</b></button>
+            <button onclick="insertMarkdown('_italic_')"><i>I</i></button>
+            <button onclick="insertMarkdown('`code`')">Code</button>
+            <button onclick="insertMarkdown('> ')">Quote</button>
+            <button onclick="insertMarkdown('- ')">List</button>
+            <button onclick="clearEditor()">Clear</button>
+        </div>
+        <div class="editor">
+            <textarea id="markdown" oninput="updatePreview()" placeholder="Write Markdown here..."></textarea>
+            <div id="preview"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        function updatePreview() {
+        let markdownText = document.getElementById("markdown").value;
+        document.getElementById("preview").innerHTML = marked.parse(markdownText);
+    }
+    
+    function insertMarkdown(mdText) {
+        let textarea = document.getElementById("markdown");
+        let startPos = textarea.selectionStart;
+        let endPos = textarea.selectionEnd;
+        let text = textarea.value;
+    
+        textarea.value = text.substring(0, startPos) + mdText + text.substring(endPos);
+        textarea.focus();
+        updatePreview();
+    }
+    
+    function clearEditor() {
+        document.getElementById("markdown").value = "";
+        updatePreview();
+    }
+    
+    </script>
+</body>
+
+</html>
